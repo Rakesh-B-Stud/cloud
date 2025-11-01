@@ -1,0 +1,8 @@
+# Dependency directories
+node_modules
+/dist
+/build
+
+# IDE/OS files
+.DS_Store
+*.swp
