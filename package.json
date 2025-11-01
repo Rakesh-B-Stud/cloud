@@ -1,0 +1,10 @@
+{
+  "name": "basic-static-site",
+  "version": "1.0.0",
+  "description": "A simple site for AWS CodePipeline deployment.",
+  "scripts": {
+    "build": "echo 'Running dummy build step...' && mkdir -p dist && cp index.html dist/"
+  },
+  "author": "",
+  "license": "ISC"
+}

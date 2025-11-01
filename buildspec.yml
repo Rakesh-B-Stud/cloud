@@ -1,0 +1,27 @@
+version: 0.2
+
+# Define the environment for the build (Node.js for our script)
+phases:
+  install:
+    commands:
+      # Use a specific Node.js runtime for the build environment
+      - echo Installing Node.js dependencies...
+      - npm install
+  
+  pre_build:
+    commands:
+      - echo Nothing to do in the pre_build phase...
+      
+  build:
+    commands:
+      # Run the build command defined in package.json
+      - echo Running build script...
+      - npm run build
+      
+artifacts:
+  files:
+    # IMPORTANT: Specify the output directory where the final static files reside.
+    # The 'build' script above copies index.html into 'dist/'.
+    - '**/*'
+  base-directory: dist 
+  discard-paths: no
