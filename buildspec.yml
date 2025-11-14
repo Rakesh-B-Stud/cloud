@@ -1,27 +1,28 @@
 version: 0.2
 
-# Define the environment for the build (Node.js for our script)
 phases:
   install:
     commands:
-      # Use a specific Node.js runtime for the build environment
       - echo Installing Node.js dependencies...
       - npm install
-  
+
   pre_build:
     commands:
-      - echo Nothing to do in the pre_build phase...
-      
+      - echo Pre-build phase started...
+
   build:
     commands:
-      # Run the build command defined in package.json
-      - echo Running build script...
+      - echo Running build command...
       - npm run build
-      
+
+  post_build:
+    commands:
+      - echo Build completed. Uploading to S3 Bucket...
+      - aws s3 sync dist/ s3://afgsaibvuwa/ --delete
+      - echo Upload finished successfully.
+
 artifacts:
   files:
-    # IMPORTANT: Specify the output directory where the final static files reside.
-    # The 'build' script above copies index.html into 'dist/'.
     - '**/*'
-  base-directory: dist 
+  base-directory: dist
   discard-paths: no
