@@ -18,7 +18,7 @@ phases:
   post_build:
     commands:
       - echo Build completed. Uploading to S3 Bucket...
-      - aws s3 sync dist/ s3://afgsaibvuwa/ --delete
+      - aws s3 sync dist/ s3://rakesh-55/ --delete
       - echo Upload finished successfully.
 
 artifacts:
