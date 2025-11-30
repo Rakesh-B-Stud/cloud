@@ -2,26 +2,41 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - echo Installing Node.js dependencies...
+      - echo "Installing dependencies..."
       - npm install
-
-  pre_build:
-    commands:
-      - echo Pre-build phase started...
 
   build:
     commands:
-      - echo Running build command...
+      - echo "Running build..."
       - npm run build
+      - echo "Build completed."
 
   post_build:
     commands:
-      - echo Build completed. Checking dist folder...
-      - ls -R dist/   # <-- THIS WILL SHOW YOU THE REAL OUTPUT PATH
-      - echo Uploading to S3 Bucket...
-      - aws s3 sync dist/ s3://rakesh-55/ --delete --region ap-south-1
-      - echo Upload finished successfully.
+      - echo "Detecting build folder..."
+
+      # Detect most common output folders
+      - |
+        if [ -d "dist" ]; then
+          EXPORT_DIR="dist"
+        elif [ -d "build" ]; then
+          EXPORT_DIR="build"
+        elif [ -d "out" ]; then
+          EXPORT_DIR="out"
+        else
+          echo "❌ No valid build directory found."
+          exit 1
+        fi
+
+      - echo "Using export folder: $EXPORT_DIR"
+      - ls -R $EXPORT_DIR
+
+      - echo "Uploading to S3..."
+      - aws s3 sync $EXPORT_DIR/ s3://$S3_BUCKET_NAME/ --delete --region $AWS_REGION
+      - echo "✔ Upload finished successfully."
 
 artifacts:
   files:
