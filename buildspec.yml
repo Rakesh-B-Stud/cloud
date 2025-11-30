@@ -1,45 +1,11 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 18
-    commands:
-      - echo "Installing dependencies..."
-      - npm install
-
   build:
     commands:
-      - echo "Running build..."
-      - npm run build
-      - echo "Build completed."
-
-  post_build:
-    commands:
-      - echo "Detecting build folder..."
-
-      # Detect most common output folders
-      - |
-        if [ -d "dist" ]; then
-          EXPORT_DIR="dist"
-        elif [ -d "build" ]; then
-          EXPORT_DIR="build"
-        elif [ -d "out" ]; then
-          EXPORT_DIR="out"
-        else
-          echo "❌ No valid build directory found."
-          exit 1
-        fi
-
-      - echo "Using export folder: $EXPORT_DIR"
-      - ls -R $EXPORT_DIR
-
-      - echo "Uploading to S3..."
-      - aws s3 sync $EXPORT_DIR/ s3://$rakesh-55/ --delete --region $ap-south-1
-      - echo "✔ Upload finished successfully."
+      - echo "Building the website..."
+      - aws s3 cp s3://rakesh-55 ./ --recursive
 
 artifacts:
   files:
     - '**/*'
-  base-directory: dist
-  discard-paths: no
